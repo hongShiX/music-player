@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>理塘丁真音乐</title>
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.js"></script>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="icon" href="images/dz.png" type="image/x-icon">
+    <script src="./js/main.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="play_wrap" id="player">
+            <div class="search_bar" :class="{playing: isPlaying}">
+                <img src="images/dz.png" alt="" class="abstractLeader autoRotate" />
+                <!-- 搜索歌曲 -->
+                <input type="text" name="" id="" autocomplete="off" @keyup.enter="searchMusic" v-model="query" />
+            </div>
+            <div class="center_con">
+                <!-- 搜索歌曲列表 -->
+                <div class="song_wrapper" ref="song_wrapper">
+                    <ul class="song_list">
+                        <li v-for="(item, index) in musicList">
+                            <!-- 点击放歌 -->
+                            <a href="javascript:;" @click="playMusic(item.id);getIndex($event)" :index="index"></a>
+                            <b>{{item.name}}</b>
+                            <span><i v-show="item.mvid != 0" @click="playMv(item.mvid)"></i></span>
+                        </li>
+                    </ul>
+                    <img src="images/line.png" alt="" class="switch_btn">
+
+                </div>
+                <!-- 歌曲容器信息 -->
+                <div class="player_con" :class="{playing: isPlaying}">
+                    <img src="images/player_bar.png" alt="" class="play_bar">
+                    <img src="images/disc.png" alt="" class="disc autoRotate">
+                    <img class="cover autoRotate" :src="picUrl" />
+                    <div class="song_info">
+                        <div class="song_name">{{songName}}</div>
+                        <p class="song_author">{{songAuthor}}</p>
+                    </div>
+                </div>
+                <!-- 评论容器 -->
+                <div class="comment_wrapper" ref="comment_wrapper">
+                    <h5 class="title">热门留言</h5>
+                    <div class="comment_list">
+                        <dl v-for="item in hotCommentsList">
+                            <dt><img :src="item.user.avatarUrl" alt=""></dt>
+                            <dd class="name">{{item.user.nickname}}</dd>
+                            <dd class="detail">{{item.content}}</dd>
+                        </dl>
+                    </div>
+                    <img src="images/line.png" alt="" class="right_line">
+                </div>
+
+            </div>
+            <div class="audio_con">
+                <audio ref='audio' controls autoplay class="myaudio" :src="musicUrl" @play="play" @pause="pause"
+                    @ended="autoNext"></audio><!--loop-->
+            </div>
+            <div class="video_con" style="display: none;" v-show="isShow">
+                <video controls="controls" ref="video" :src="mvUrl" autoplay></video>
+                <div class="mask"></div>
+                <div class="shutoff" @click="hide"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
